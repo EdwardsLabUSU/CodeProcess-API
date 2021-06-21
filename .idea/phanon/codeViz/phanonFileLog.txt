@@ -1,0 +1,5 @@
+/hello.py
+/home/pi/PycharmProjects/nepse-analyzer/hello.py
+/scraper/main.py
+/main.py
+/.idea/.gitignore
