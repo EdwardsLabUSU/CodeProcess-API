@@ -3,3 +3,5 @@
 /scraper/main.py
 /main.py
 /.idea/.gitignore
+/Procfile
+/requirements.txt
