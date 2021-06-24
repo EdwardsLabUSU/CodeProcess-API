@@ -1,3 +1,0 @@
-/pattern.py
-/task1.py
-/plan1.txt
