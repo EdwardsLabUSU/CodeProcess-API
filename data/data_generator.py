@@ -67,9 +67,9 @@ class DiffVisualizer:
         return code, diff_book, grid_points, diff_match_blocks
     
     @staticmethod
-    def matching_lines(final_code, snapShot):
+    def matching_lines(_final, _snap):
         d = difflib.Differ()
-        diff = d.compare(final_code.splitlines(True), snapShot.splitlines(True))
+        diff = d.compare(_final.splitlines(True), _snap.splitlines(True))
         # print('\n'.join(diff))
         blocks = []
         # i is the first file's index, j the second's
@@ -107,43 +107,43 @@ class DiffVisualizer:
             # current_code = '\n'.join(each)
             then = datetime.datetime.now()
             current_code = each
-            # d=difflib.SequenceMatcher(None, current_code, final_code)
+            d=difflib.SequenceMatcher(None, current_code, final_code)
             # d = difflib.SequenceMatcher(None, final_code, current_code)
-            # mat = d.get_matching_blocks()
-            mat = DiffVisualizer.matching_lines(final_code, current_code)
+            mat = d.get_matching_blocks()
+            # mat = DiffVisualizer.matching_lines(final_code, current_code)
             points = [0 for each in range(0, final_code_len)]
             # display(mat)
             match_block_diff = []
             match_block_final = []
             final_splitted = final_code.split('\n') 
             splitted_snapshot = current_code.split('\n')
-            for each_match in mat:
-                start_index, size = get_start_size(each_match[0], each_match[2], final_splitted)
-                
-                # start_line = each_match[0]
-                # end_line = each_match[0] + each_match[3]
-                # startIndex = len(final_splitted[:start_line].join('\n'))
-                # size = len(final_splitted[start_line:end_line+1].join('\n'))
-                for i in range(start_index, start_index + size):
-                    points[i] = 1
-                    grid_points.append([i, row])
-                    
-                current_start, current_size = get_start_size(each_match[1], each_match[2], splitted_snapshot)
-                match_block_diff.append([current_start, current_size])
-                match_block_final.append([start_index, size])
-            
-            # for each_match in mat[:-1]:
-            #     initial_b = each_match.b
-            #     # initial_b = each_match.a
-            #     size = each_match.size
-            #     # print('Initial b size: ', initial_b, size)
-            #     for i in range(initial_b, initial_b + size):
+            # for each_match in mat:
+            #     start_index, size = get_start_size(each_match[0], each_match[2], final_splitted)
+            #     
+            #     # start_line = each_match[0]
+            #     # end_line = each_match[0] + each_match[3]
+            #     # startIndex = len(final_splitted[:start_line].join('\n'))
+            #     # size = len(final_splitted[start_line:end_line+1].join('\n'))
+            #     for i in range(start_index, start_index + size):
             #         points[i] = 1
             #         grid_points.append([i, row])
-            #     match_block_diff.append([each_match.a, each_match.size])
-            #     match_block_final.append([each_match.b, each_match.size])
-            #     # match_block_diff.append([each_match.b, each_match.size])
-            #     # match_block_final.append([each_match.a, each_match.size])
+            #         
+            #     current_start, current_size = get_start_size(each_match[1], each_match[2], splitted_snapshot)
+            #     match_block_diff.append([current_start, current_size])
+            #     match_block_final.append([start_index, size])
+            
+            for each_match in mat[:-1]:
+                initial_b = each_match.b
+                # initial_b = each_match.a
+                size = each_match.size
+                # print('Initial b size: ', initial_b, size)
+                for i in range(initial_b, initial_b + size):
+                    points[i] = 1
+                    grid_points.append([i, row])
+                match_block_diff.append([each_match.a, each_match.size])
+                match_block_final.append([each_match.b, each_match.size])
+                # match_block_diff.append([each_match.b, each_match.size])
+                # match_block_final.append([each_match.a, each_match.size])
             grid_data.append(points)
             diff_match_blocks.append({
                 'final': match_block_final,
@@ -184,6 +184,8 @@ if __name__ == '__main__':
     columns = ['event', 'input', 'removed', 'cursor_pos', 'timestamp', 'file', 'ver']
     print("Directories: ", dirs)
     for each_dir in dirs:
+        if '__' in each_dir:
+            continue
         path = os.path.join(os.getcwd(), each_dir)
         csv_file = pd.read_csv(os.path.join(path, 'phanonEditLog.csv'), names=columns, index_col=None)
         file_names = csv_file.file.unique()
