@@ -75,14 +75,14 @@ class DiffVisualizer:
             # current_code = '\n'.join(each)
             then = datetime.datetime.now()
             current_code = each
-            # d=difflib.SequenceMatcher(None, current_code, final_code)
-            d = difflib.SequenceMatcher(None, final_code, current_code)
+            d=difflib.SequenceMatcher(None, current_code, final_code)
+            # d = difflib.SequenceMatcher(None, final_code, current_code)
             mat = d.get_matching_blocks()
             points = [0 for each in range(0, final_code_len)]
             # display(mat)
             for each_match in mat[:-1]:
-                initial_b = each_match.a
                 # initial_b = each_match.b
+                initial_b = each_match.b
                 size = each_match.size
                 # print('Initial b size: ', initial_b, size)
                 for i in range(initial_b, initial_b + size):
