@@ -65,9 +65,40 @@ class DiffVisualizer:
         grid_data, grid_points, diff_match_blocks = DiffVisualizer.generate_grid_data(code, diff_book)
         DiffVisualizer.plot_grid(grid_data, code)
         return code, diff_book, grid_points, diff_match_blocks
+    
+    @staticmethod
+    def matching_lines(final_code, snapShot):
+        d = difflib.Differ()
+        diff = d.compare(final_code.splitlines(True), snapShot.splitlines(True))
+        # print('\n'.join(diff))
+        blocks = []
+        # i is the first file's index, j the second's
+        i = 0;
+        j = 0;
+        for line in diff:
+            start = line[0]
+            line = line[2:]
+            if (start == ' '):
+                blocks.append((i, j, len(line)))
+                i += len(line)
+                j += len(line)
+            elif (start == '-'):
+                i += len(line)
+            elif (start == '+'):
+                j += len(line)
+        return blocks
 
     @staticmethod
     def generate_grid_data(final_code, diff_list):
+        
+        
+        def get_start_size(start, size, splitted):
+            start_line = start
+            end_line = start + size
+            _start_index = len('\n'.join(splitted[:start_line]))
+            _size = len('\n'.join(splitted[start_line:end_line + 1]))
+            return _start_index, _size
+        
         grid_data = []
         grid_points = []
         diff_match_blocks = []
@@ -76,25 +107,43 @@ class DiffVisualizer:
             # current_code = '\n'.join(each)
             then = datetime.datetime.now()
             current_code = each
-            d=difflib.SequenceMatcher(None, current_code, final_code)
+            # d=difflib.SequenceMatcher(None, current_code, final_code)
             # d = difflib.SequenceMatcher(None, final_code, current_code)
-            mat = d.get_matching_blocks()
+            # mat = d.get_matching_blocks()
+            mat = DiffVisualizer.matching_lines(final_code, current_code)
             points = [0 for each in range(0, final_code_len)]
             # display(mat)
             match_block_diff = []
             match_block_final = []
-            for each_match in mat[:-1]:
-                initial_b = each_match.b
-                # initial_b = each_match.a
-                size = each_match.size
-                # print('Initial b size: ', initial_b, size)
-                for i in range(initial_b, initial_b + size):
+            final_splitted = final_code.split('\n') 
+            splitted_snapshot = current_code.split('\n')
+            for each_match in mat:
+                start_index, size = get_start_size(each_match[0], each_match[2], final_splitted)
+                
+                # start_line = each_match[0]
+                # end_line = each_match[0] + each_match[3]
+                # startIndex = len(final_splitted[:start_line].join('\n'))
+                # size = len(final_splitted[start_line:end_line+1].join('\n'))
+                for i in range(start_index, start_index + size):
                     points[i] = 1
                     grid_points.append([i, row])
-                match_block_diff.append([each_match.a, each_match.size])
-                match_block_final.append([each_match.b, each_match.size])
-                # match_block_diff.append([each_match.b, each_match.size])
-                # match_block_final.append([each_match.a, each_match.size])
+                    
+                current_start, current_size = get_start_size(each_match[1], each_match[2], splitted_snapshot)
+                match_block_diff.append([current_start, current_size])
+                match_block_final.append([start_index, size])
+            
+            # for each_match in mat[:-1]:
+            #     initial_b = each_match.b
+            #     # initial_b = each_match.a
+            #     size = each_match.size
+            #     # print('Initial b size: ', initial_b, size)
+            #     for i in range(initial_b, initial_b + size):
+            #         points[i] = 1
+            #         grid_points.append([i, row])
+            #     match_block_diff.append([each_match.a, each_match.size])
+            #     match_block_final.append([each_match.b, each_match.size])
+            #     # match_block_diff.append([each_match.b, each_match.size])
+            #     # match_block_final.append([each_match.a, each_match.size])
             grid_data.append(points)
             diff_match_blocks.append({
                 'final': match_block_final,
