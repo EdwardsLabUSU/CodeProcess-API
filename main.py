@@ -2,9 +2,11 @@ import os
 
 from flask import Flask, send_file
 from flask_cors import CORS
+from flask_compress import Compress
 
 app = Flask(__name__)
 CORS(app)
+Compress(app)
 path = os.getcwd()
 
 
