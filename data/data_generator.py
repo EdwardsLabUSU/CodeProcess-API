@@ -62,14 +62,15 @@ class DiffVisualizer:
     def visualize(df):
         _df = df[(df.event == 'e') | (df.event == 'a')]
         code, diff_book = PhanonPlayback.start_playback(_df)
-        grid_data, grid_points = DiffVisualizer.generate_grid_data(code, diff_book)
+        grid_data, grid_points, diff_match_blocks = DiffVisualizer.generate_grid_data(code, diff_book)
         DiffVisualizer.plot_grid(grid_data, code)
-        return code, diff_book, grid_points
+        return code, diff_book, grid_points, diff_match_blocks
 
     @staticmethod
     def generate_grid_data(final_code, diff_list):
         grid_data = []
         grid_points = []
+        diff_match_blocks = []
         final_code_len = len(final_code)
         for row, each in enumerate(diff_list):
             # current_code = '\n'.join(each)
@@ -80,6 +81,8 @@ class DiffVisualizer:
             mat = d.get_matching_blocks()
             points = [0 for each in range(0, final_code_len)]
             # display(mat)
+            match_block_diff = []
+            match_block_final = []
             for each_match in mat[:-1]:
                 # initial_b = each_match.b
                 initial_b = each_match.b
@@ -88,9 +91,15 @@ class DiffVisualizer:
                 for i in range(initial_b, initial_b + size):
                     points[i] = 1
                     grid_points.append([i, row])
+                match_block_diff.append([each_match.a, each_match.size])
+                match_block_final.append([each_match.b, each_match.size])
             grid_data.append(points)
+            diff_match_blocks.append({
+                'final': match_block_final,
+                'snapShot': match_block_diff
+            })
         grid_data.append([1 for _ in range(0, final_code_len)])
-        return grid_data, grid_points
+        return grid_data, grid_points, diff_match_blocks
 
     @staticmethod
     def plot_grid(data, final_code):
@@ -131,7 +140,7 @@ if __name__ == '__main__':
             print("Dir: ", each_dir, each_name)
             if each_name.split('.')[0] in each_dir or len(file_names) == 1:
                 csv_file = csv_file[csv_file.file == each_name]
-                code, diff_book, grid_data = DiffVisualizer.visualize(csv_file)
+                code, diff_book, grid_data, diff_match_blocks = DiffVisualizer.visualize(csv_file)
 
                 diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
                 json.dump(diff_book, diff_file)
@@ -144,3 +153,7 @@ if __name__ == '__main__':
                 grid_file = open(os.path.join(path, 'grid_point.json'), 'w')
                 json.dump(grid_data, grid_file)
                 grid_file.close()
+
+                match_file = open(os.path.join(path, 'match_block.json'), 'w')
+                json.dump(diff_match_blocks, match_file)
+                match_file.close()
