@@ -1,11 +1,10 @@
-import os
+import os, json
 
-from flask import Flask, send_file
+from flask import Flask, make_response
 from flask_cors import CORS
-from flask_compress import Compress
+import gzip
 
 app = Flask(__name__)
-Compress(app)
 CORS(app)
 path = os.getcwd()
 
@@ -19,7 +18,11 @@ def index():
 @app.route('/data/<folder>/<file>')
 def get_file(folder, file):
     file_dir = os.path.join(path, f"data/{folder}/{file}")
-    return send_file(file_dir)
+    content = gzip.compress(json.dumps(open(file_dir, 'r').readlines()).encode('utf8'), 5)
+    response = make_response(content)
+    response.headers['Content-length'] = len(content)
+    response.headers['Content-Encoding'] = 'gzip'
+    return response
 
 
 if __name__ == '__main__':
