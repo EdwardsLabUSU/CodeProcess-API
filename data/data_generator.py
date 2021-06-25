@@ -142,5 +142,5 @@ if __name__ == '__main__':
                 code_file.close()
 
                 grid_file = open(os.path.join(path, 'grid_point.json'), 'w')
-                grid_file.writelines(code)
+                json.dump(grid_data, grid_file)
                 grid_file.close()
