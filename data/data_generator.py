@@ -95,7 +95,7 @@ class DiffVisualizer:
 
                 # don't synch up unless the lines have a similarity score of at
                 # least cutoff; best_ratio tracks the best score seen so far
-                best_ratio, cutoff = 0.74, 0.75
+                best_ratio, cutoff = 0.34, 0.35
                 cruncher = difflib.SequenceMatcher(self.charjunk)
                 eqi, eqj = None, None  # 1st indices of equal lines (if any)
 
