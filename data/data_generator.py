@@ -76,8 +76,8 @@ class DiffVisualizer:
             # current_code = '\n'.join(each)
             then = datetime.datetime.now()
             current_code = each
-            d=difflib.SequenceMatcher(None, current_code, final_code)
-            # d = difflib.SequenceMatcher(None, final_code, current_code)
+            # d=difflib.SequenceMatcher(None, current_code, final_code)
+            d = difflib.SequenceMatcher(None, final_code, current_code)
             mat = d.get_matching_blocks()
             points = [0 for each in range(0, final_code_len)]
             # display(mat)
@@ -85,14 +85,14 @@ class DiffVisualizer:
             match_block_final = []
             for each_match in mat[:-1]:
                 # initial_b = each_match.b
-                initial_b = each_match.b
+                initial_b = each_match.a
                 size = each_match.size
                 # print('Initial b size: ', initial_b, size)
                 for i in range(initial_b, initial_b + size):
                     points[i] = 1
                     grid_points.append([i, row])
-                match_block_diff.append([each_match.a, each_match.size])
-                match_block_final.append([each_match.b, each_match.size])
+                match_block_diff.append([each_match.b, each_match.size])
+                match_block_final.append([each_match.a, each_match.size])
             grid_data.append(points)
             diff_match_blocks.append({
                 'final': match_block_final,
