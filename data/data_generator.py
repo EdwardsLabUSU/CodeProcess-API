@@ -68,26 +68,30 @@ class DiffVisualizer:
     
     @staticmethod
     def matching_lines(_final, _snap):
+        def debug(s):
+            #     print(s)
+            pass
+
         class DiffHelper:
             def __init__(self, charjunk=None):
                 self.charjunk = charjunk
 
             def _fancy_replace(self, abidx, a, alo, ahi, b, blo, bhi):
                 r"""
-                When replacing one block of lines with another, search the blocks
-                for *similar* lines; the best-matching pair (if any) is used as a
-                synch point, and intraline difference marking is done on the
-                similar pair. Lots of work, but often worth it.
-                Example:
-                >>> d = Differ()
-                >>> results = d._fancy_replace(['abcDefghiJkl\n'], 0, 1,
-                ...                            ['abcdefGhijkl\n'], 0, 1)
-                >>> print(''.join(results), end="")
-                - abcDefghiJkl
-                ?    ^  ^  ^
-                + abcdefGhijkl
-                ?    ^  ^  ^
-                """
+            When replacing one block of lines with another, search the blocks
+            for *similar* lines; the best-matching pair (if any) is used as a
+            synch point, and intraline difference marking is done on the
+            similar pair. Lots of work, but often worth it.
+            Example:
+            >>> d = Differ()
+            >>> results = d._fancy_replace(['abcDefghiJkl\n'], 0, 1,
+            ...                            ['abcdefGhijkl\n'], 0, 1)
+            >>> print(''.join(results), end="")
+            - abcDefghiJkl
+            ?    ^  ^  ^
+            + abcdefGhijkl
+            ?    ^  ^  ^
+            """
 
                 # don't synch up unless the lines have a similarity score of at
                 # least cutoff; best_ratio tracks the best score seen so far
@@ -123,10 +127,12 @@ class DiffVisualizer:
                     if eqi is None:
                         # no identical pair either -- treat it as a straight replace
                         # TODO fix this
-                        #                 print('here')
+                        #                 debug('here')
                         #                 yield None
-                        abidx[0] += ahi - alo
-                        abidx[1] += bhi - blo
+                        abidx[0] += sum([len(a[ali]) for ali in range(alo, ahi)])
+                        abidx[1] += sum([len(b[bli]) for bli in range(blo, bhi)])
+                        #                 abidx[1] += bhi-blo
+                        #                 debug(' '.join(['xx', str(ahi), str(alo), str(bhi), str(blo)]))
                         #                 yield from self._plain_replace(a, alo, ahi, b, blo, bhi)
                         return
                     # no close pair, but an identical pair -- synch up on that
@@ -139,23 +145,27 @@ class DiffVisualizer:
                 # identical
 
                 # pump out diffs from before the synch point
+                debug('yy')
                 yield from self._fancy_helper(abidx, a, alo, best_i, b, blo, best_j)
 
                 # do intraline marking on the synch pair
                 aelt, belt = a[best_i], b[best_j]
-                #         print('synch pair:', aelt, belt)
+                #         debug('synch pair:', aelt, belt)
                 if eqi is None:
                     # pump out a '-', '?', '+', '?' quad for the synched lines
                     atags = btags = ""
                     cruncher.set_seqs(aelt, belt)
+                    debug('zz')
                     for tag, ai1, ai2, bj1, bj2 in cruncher.get_opcodes():
                         la, lb = ai2 - ai1, bj2 - bj1
-                        #                 print('*', tag, abidx)
+                        #                 debug(' '.join(['zz', tag, a, b]))#a[abidx[0]], b[abidx[1]]]))
+                        debug(' '.join(['zz', tag, str(abidx[0]), str(abidx[1]), str(la), str(lb)]))
+                        #                 print(abidx)
                         if tag == 'replace':
                             atags += '^' * la
                             btags += '^' * lb
                             abidx[0] += la
-                            abidx[1] += la
+                            abidx[1] += lb
                         elif tag == 'delete':
                             atags += '-' * la
                             abidx[0] += la
@@ -174,29 +184,40 @@ class DiffVisualizer:
                 else:
                     # the synch pair is identical
                     # TODO fix
+                    debug('ww')
                     yield (abidx[0], abidx[1], len(aelt))
                 #             yield '  ' + aelt
 
                 # pump out diffs from after the synch point
-
+                debug('gg')
                 yield from self._fancy_helper(abidx, a, best_i + 1, ahi, b, best_j + 1, bhi)
 
             def _fancy_helper(self, abidx, a, alo, ahi, b, blo, bhi):
                 g = []
                 if alo < ahi:
+                    debug('hh')
                     if blo < bhi:
                         #                 g = self._fancy_replace(abidx, a, alo, ahi, b, blo, bhi)
                         yield from self._fancy_replace(abidx, a, alo, ahi, b, blo, bhi)
                     else:
-                        abidx[0] += ahi - alo
+                        debug('ii')
+                        #                 abidx[0] += ahi-alo
+                        abidx[0] += sum([len(a[ali]) for ali in range(alo, ahi)])
+                #                 abidx[1] += sum([len(b[bli]) for bli in range(blo, bhi)])
+
+                #                 abidx[1] += bhi-blo
                 #                 print('dump')
                 #                 g = self._dump('-', a, alo, ahi)
                 elif blo < bhi:
-                    abidx[1] += bhi - blo
-        #             print('dump')
-        #             g = self._dump('+', b, blo, bhi)
+                    debug('jj')
+                    #             abidx[0] += ahi-alo
+                    #             abidx[1] += bhi-blo
+                    #             abidx[0] += sum([len(a[ali]) for ali in range(alo, ahi)])
+                    abidx[1] += sum([len(b[bli]) for bli in range(blo, bhi)])
+            #             print('dump')
+            #             g = self._dump('+', b, blo, bhi)
 
-        #         yield from g
+            #         yield from g
 
         def test(linejunk, a, b):
             blocks = []
@@ -229,17 +250,14 @@ class DiffVisualizer:
                     yield block
                 else:
                     raise ValueError('unknown tag %r' % (tag,))
-    
+
             return blocks
-    
-            #        0123 45678 90123 45678
-            #        012  3456  7890  1234  567890
-    
-        test1 = 'cat\ndogs\nfish\ngoat\ngerbil\n'
-        test2 = 'cat\ndots\nfis\ngoat\ngerbil\n'
         newline = True
         blocks = test(None, _final.splitlines(newline), _snap.splitlines(newline))
         return blocks
+
+            # for b in blocks:
+            #     print(b)
         # for b in blocks:
         #     print(b)
 
@@ -348,7 +366,7 @@ class DiffVisualizer:
 
 
 if __name__ == '__main__':
-    import json
+    import json, difflib
     dirs = [ name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name)) ]
     columns = ['event', 'input', 'removed', 'cursor_pos', 'timestamp', 'file', 'ver']
     print("Directories: ", dirs)
