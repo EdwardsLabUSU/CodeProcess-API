@@ -62,9 +62,9 @@ class DiffVisualizer:
     def visualize(df):
         _df = df[(df.event == 'e') | (df.event == 'a')]
         code, diff_book = PhanonPlayback.start_playback(_df)
-        grid_data = DiffVisualizer.generate_grid_data(code, diff_book)
+        grid_data, grid_points = DiffVisualizer.generate_grid_data(code, diff_book)
         DiffVisualizer.plot_grid(grid_data, code)
-        return code, diff_book, grid_data
+        return code, diff_book, grid_points
 
     @staticmethod
     def generate_grid_data(final_code, diff_list):
@@ -89,8 +89,8 @@ class DiffVisualizer:
                     points[i] = 1
                     grid_points.append([i, row])
             grid_data.append(points)
-        grid_data.append([1 for each in range(0, final_code_len)])
-        return grid_data
+        grid_data.append([1 for _ in range(0, final_code_len)])
+        return grid_data, grid_points
 
     @staticmethod
     def plot_grid(data, final_code):
