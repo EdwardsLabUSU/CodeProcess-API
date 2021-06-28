@@ -294,7 +294,6 @@ class DiffVisualizer:
         grid_data = []
         grid_points = []
         diff_match_blocks = []
-        cursor_pos = diff_list['cursor_pos']
         diff_list = diff_list['diff']
         diff_line = []
         final_code_len = len(final_code)
@@ -412,7 +411,7 @@ if __name__ == '__main__':
                 code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(csv_file)
 
                 diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
-                json.dump(diff_book, diff_file)
+                json.dump(diff_book, diff_file['diff'])
                 diff_file.close()
 
                 code_file = open(os.path.join(path, 'code_book.txt'), 'w')
