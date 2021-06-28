@@ -6,8 +6,8 @@ from flask_compress import Compress
 import gzip
 
 app = Flask(__name__)
-Compress(app)
 CORS(app)
+Compress(app)
 path = os.getcwd()
 
 
