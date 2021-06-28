@@ -294,8 +294,10 @@ class DiffVisualizer:
         grid_data = []
         grid_points = []
         diff_match_blocks = []
+        
+        cursor_positions = diff_list['cursor_pos']
         diff_list = diff_list['diff']
-        diff_line = []
+        
         final_code_len = len(final_code)
         for row, each in enumerate(diff_list):
             # current_code = '\n'.join(each)
@@ -365,7 +367,7 @@ class DiffVisualizer:
                 'snapShot': match_block_diff
             })
         grid_data.append([1 for _ in range(0, final_code_len)])
-        return grid_data, grid_points, diff_match_blocks, diff_line
+        return grid_data, grid_points, diff_match_blocks, cursor_positions
 
     @staticmethod
     def plot_grid(data, final_code):
