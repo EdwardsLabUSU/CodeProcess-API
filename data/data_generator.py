@@ -269,8 +269,8 @@ class DiffVisualizer:
         post_highlight = _code[:char_pos + size+1]
         pre_line = pre_highlight.split('\n')
         post_line = post_highlight.split('\n')
-        start_char = len(pre_line) - 1
-        end_char = len(post_line) - 1
+        start_char = len(pre_line[-1]) - 1
+        end_char = len(post_line[-1]) - 1
         return {
             'start_line': len(pre_line),
             'start_char': start_char,
