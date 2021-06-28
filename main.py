@@ -6,6 +6,8 @@ from flask_compress import Compress
 import gzip
 
 app = Flask(__name__)
+app.config['COMPRESS_ALGORITHM'] = 'gzip'
+app.config['COMPRESS_LEVEL'] = 6
 CORS(app)
 Compress(app)
 path = os.getcwd()
