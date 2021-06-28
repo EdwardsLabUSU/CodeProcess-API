@@ -18,6 +18,7 @@ class PhanonPlayback:
         global event_book
         diff_book = []
         event_book = []
+        diff_cursor_pos = []
         code_book = ''
         for index, row in data_frame.iterrows():
             # print("Index: ", index)
@@ -43,8 +44,9 @@ class PhanonPlayback:
                 else:
                     continue
                 diff_book.append(code_book)
+                diff_cursor_pos.append(len(code_book[:cursor_pos+1].split('\n')))
                 event_book.append(row)
-        return code_book, diff_book
+        return code_book, {'diff': diff_book, 'cursor_pos': diff_cursor_pos}
 
 
 
@@ -62,9 +64,9 @@ class DiffVisualizer:
     def visualize(df):
         _df = df[(df.event == 'e') | (df.event == 'a')]
         code, diff_book = PhanonPlayback.start_playback(_df)
-        grid_data, grid_points, diff_match_blocks = DiffVisualizer.generate_grid_data(code, diff_book)
+        grid_data, grid_points, diff_match_blocks, diff_line_number = DiffVisualizer.generate_grid_data(code, diff_book)
         DiffVisualizer.plot_grid(grid_data, code)
-        return code, diff_book, grid_points, diff_match_blocks
+        return code, diff_book, grid_points, diff_match_blocks, diff_line_number
     
     @staticmethod
     def matching_lines(_final, _snap):
@@ -260,6 +262,23 @@ class DiffVisualizer:
             #     print(b)
         # for b in blocks:
         #     print(b)
+    
+    @staticmethod
+    def get_line_number(_code, char_pos, size):
+        pre_highlight = _code[:char_pos + 1]
+        post_highlight = _code[:char_pos + size+1]
+        pre_line = pre_highlight.split('\n')
+        post_line = post_highlight.split('\n')
+        start_char = len(pre_line) - 1
+        end_char = len(post_line) - 1
+        return {
+            'start_lne': len(pre_line),
+            'start_char': start_char,
+            'end_line': len(post_line),
+            'end_char': end_char
+        }
+        
+        
 
     @staticmethod
     def generate_grid_data(final_code, diff_list):
@@ -275,6 +294,9 @@ class DiffVisualizer:
         grid_data = []
         grid_points = []
         diff_match_blocks = []
+        cursor_pos = diff_list['cursor_pos']
+        diff_list = diff_list['diff']
+        diff_line = []
         final_code_len = len(final_code)
         for row, each in enumerate(diff_list):
             # current_code = '\n'.join(each)
@@ -290,7 +312,6 @@ class DiffVisualizer:
             match_block_diff = []
             match_block_final = []
             final_splitted = final_code.split('\n') 
-            splitted_snapshot = current_code.split('\n')
             # for each_match in mat:
             #     start_index, size = get_start_size(each_match[0], each_match[2], final_splitted)
             #     
@@ -314,10 +335,14 @@ class DiffVisualizer:
                 for i in range(initial_b, initial_b + size):
                     points[i] = 1
                     grid_points.append([i, row])
-                match_block_diff.append([each_match[1], each_match[2]])
-                match_block_final.append([each_match[0], each_match[2]])
+                # match_block_diff.append([each_match[1], each_match[2]])
+                # match_block_final.append([each_match[0], each_match[2]])
+                match_block_diff.append(DiffVisualizer.get_line_number(current_code, each_match[1], each_match[2]))
+                match_block_final.append(DiffVisualizer.get_line_number(final_code, each_match[0], each_match[2])),
+            
                 # match_block_diff.append([each_match.b, each_match.size])
                 # match_block_final.append([each_match.a, each_match.size])
+                
             
             # for each_match in mat[:-1]:
             #     initial_b = each_match.b
@@ -332,12 +357,16 @@ class DiffVisualizer:
             #     # match_block_diff.append([each_match.b, each_match.size])
             #     # match_block_final.append([each_match.a, each_match.size])
             grid_data.append(points)
+            # diff_match_blocks.append({
+            #     'final': match_block_final,
+            #     'snapShot': match_block_diff
+            # })
             diff_match_blocks.append({
                 'final': match_block_final,
                 'snapShot': match_block_diff
             })
         grid_data.append([1 for _ in range(0, final_code_len)])
-        return grid_data, grid_points, diff_match_blocks
+        return grid_data, grid_points, diff_match_blocks, diff_line
 
     @staticmethod
     def plot_grid(data, final_code):
@@ -380,7 +409,7 @@ if __name__ == '__main__':
             print("Dir: ", each_dir, each_name)
             if each_name.split('.')[0] in each_dir or len(file_names) == 1:
                 csv_file = csv_file[csv_file.file == each_name]
-                code, diff_book, grid_data, diff_match_blocks = DiffVisualizer.visualize(csv_file)
+                code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(csv_file)
 
                 diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
                 json.dump(diff_book, diff_file)
@@ -397,3 +426,7 @@ if __name__ == '__main__':
                 match_file = open(os.path.join(path, 'match_block.json'), 'w')
                 json.dump(diff_match_blocks, match_file)
                 match_file.close()
+
+                diff_line_file = open(os.path.join(path, 'diff_line.json'), 'w')
+                json.dump(diff_line, diff_line_file)
+                diff_line_file.close()
