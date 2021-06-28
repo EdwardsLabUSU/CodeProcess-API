@@ -272,7 +272,7 @@ class DiffVisualizer:
         start_char = len(pre_line) - 1
         end_char = len(post_line) - 1
         return {
-            'start_lne': len(pre_line),
+            'start_line': len(pre_line),
             'start_char': start_char,
             'end_line': len(post_line),
             'end_char': end_char
