@@ -257,7 +257,8 @@ if __name__ == '__main__':
         print("File names: ", file_names)
         for each_name in file_names:
             if '.'.join(each_name.split('.')[:-1]) in each_dir or len(file_names) == 1:
-                
+                if ".py" not in each_name:
+                    continue
                 _file_df = csv_file[csv_file.file == each_name]
                 print("Dir: ", each_dir, each_name, _file_df.shape)
                 code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(_file_df)
