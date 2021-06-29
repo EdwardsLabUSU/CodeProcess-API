@@ -173,8 +173,8 @@ if __name__ == '__main__':
         csv_file = pd.read_csv(os.path.join(path, 'phanonEditLog.csv'), names=columns, index_col=None)
         file_names = csv_file.file.unique()
         for each_name in file_names:
-            print("Dir: ", each_dir, each_name)
             if each_name.split('.')[0] in each_dir or len(file_names) == 1:
+                print("Dir: ", each_dir, each_name)
                 csv_file = csv_file[csv_file.file == each_name]
                 code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(csv_file)
 

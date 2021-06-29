@@ -1,0 +1,172 @@
+requirements spec.
+    3 options:
+        rectangle:
+            asks user for x,y coordinates
+            asks user for offset (how far the corner of each rectangle is from the center)
+            asks user for the height of the rectangle
+            asks user for the width of a rectangle
+            asks user for the count (number of rectangles in the 360 pattern)
+            asks user for rotation (how much each rectangle will rotate about the center)
+            each rectangle should be a new random color, there must be at least 4 colors
+
+        circle:
+            asks user for x,y coordinates
+            asks user for offset (see rectangle)(center of circle is radius + offset)
+            asks user for radius
+            asks user for count (see rectangle)
+            each circle should be one of 4 new random colors
+
+        super pattern:
+            ask user for how many patters
+            make that number of rectangles and circles with random inputs
+    then ask if:
+        play again and keep drawings
+        play again but clear board
+        all done!
+
+system annalysis:
+    task1.py:
+        DON'T MODIFY THE STARTER CODE
+        add file header
+        import random?
+        import pattern.py
+        add input to the 3 and assign variables
+        add input for clear/play again and assign variables
+    pattern.py:
+        reset()
+        erase and start over
+        setup()
+            make turtle draw fast and have a 1000 X 800 window
+        drawRectanglePattern()
+            take input and draw the rectangle pattern
+            calls drawRectangle()
+        drawRectangle()
+            draws a single rectangle using input
+        drawCirclePattern()
+            draws the circle pattern with input
+        drawSuperPattern()
+            repeat input times
+                draw random rectangle and circle patterns
+                make sure the patterns are drawn on the screen
+        setRandomColor()
+            no parameters (stuff in the parenthesis)
+            set turtle to random color
+            use at least 4 colors
+        done()
+            called when user quits
+            keeps turtle window open
+system design
+    task1.py:
+        DON'T MODIFY THE STARTER CODE
+        replace file header (the standard one)
+        IMPORTS
+            import random
+            import pattern.py
+            import turtle
+        PATTERN INPUT AND VARIABLES FOR RECTANGLE
+            centerX, centerY = eval(input("enter a center point(X, Y)""))
+            offset = eval(input("offset?"))
+            width = eval(input(width?))
+            height = eval(input("height?"))
+            count = eval(input("count?"))
+            rotation = eval(input("rotation?"))
+
+        PATTERN INPUT AND VARIABLES FOR CIRCLE
+            centerX, centerY = eval(input("enter a center point(X, Y)""))
+            offset = eval(input(offset?))
+            radius = eval(input(offset?))
+            count = eval(input(count?))
+
+        PATTERN INPUT AND VARIABLES FOR SUPER
+            num = input(number?)
+
+    #########################FIX DONE() ONCE THE REST OF THE PROGRAM IS FINISHED###################
+        FINISH INPUT CLEAR/PLAY AGAIN
+            if responce == 3
+                then playagain = True
+            if responce = 2
+                then reset
+            else:
+                nothing
+
+    pattern.py
+        import turtle
+
+        def reset()
+        turtle.clear
+
+        def setup()
+            turtle.penup
+            turtle.speed(20)
+            turtle.screensize(1000,800)
+
+        def drawRectanglePattern(centerX, centerY, offset, width, height, count, rotation)
+        # draws the rectangle pattern with input
+            1. assign dial = 360 / count
+            2. for i in range (count)
+                2. setRandomColor()
+                3. have turtle goto centerX,centerY
+                4. set turtle.direction(up)
+                5. turn turtle.right(dial * i)
+                4. move turtle.forward(offset)
+                5. turn turtle.right(rotation)
+                6. turtle.pendown
+                7. call drawRectangle(width, height)
+                8. turtle.penup
+
+        def drawRectangle(width, height)
+        # draws 1 rectangle
+            1. move turtle.forward(height)
+            2. turn turtle.right(90)
+            3. move turtle.forward(width)
+            4. turn turtle.right(90)
+            5. move turtle.forward(height)
+            6. turn turtle.right(90)
+            7. move turtle.forward(width)
+
+        def drawCirclePattern()
+        # draws the circle pattern with input
+            1. assign dial = 360 / count
+            2. for z in range(count)
+                setRandomColor()
+                3. have turtle goto centerX,centerY
+                4. set turtle.direction(up)
+                5. turn turtle.right(dial * z)
+                4. move turtle.forward(offset)
+                5. turn turtle.right(rotation)
+                6. turtle.pendown
+                7. draw turtle.circle(radius)
+                8. turtle.penup
+
+        def drawSuperPattern(num)
+        # draw random rectangle and circle patterns
+            for y in (num + 1)
+                centerX = randint(-500, 500)
+                centerY = randint(-400, 400)
+                offset = randint(0, 100)
+                count = randint(0, 100)
+                circRec = randint(0,1)
+                if circRec == 1
+                    drawCirclePattern(centerX, centerY, offset, radius, count)
+                else
+                    drawRectanglePattern(centerX, centerY, offset, width, height, count, rotation)
+                make sure the patterns are drawn on the screen
+        def setRandomColor()
+            # set turtle to random color
+            turColor = randint(0,4)
+            if turColor == 1
+                turtle.color red
+            elif 2
+                turtle.color blue
+            elif 3
+                turtle.color green
+            elif 4
+                turtle.color orange
+            else
+                turtle.color purple
+
+        def done()
+            turtle.finish
+
+Testing:
+    all choices seem to work
