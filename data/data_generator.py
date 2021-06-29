@@ -172,10 +172,12 @@ if __name__ == '__main__':
         path = os.path.join(os.getcwd(), each_dir)
         csv_file = pd.read_csv(os.path.join(path, 'phanonEditLog.csv'), names=columns, index_col=None)
         file_names = csv_file.file.unique()
+        print("File names: ", file_names)
         for each_name in file_names:
-            if each_name.split('.')[0] in each_dir or len(file_names) == 1:
-                print("Dir: ", each_dir, each_name)
+            if '.'.join(each_name.split('.')[:-1]) in each_dir or len(file_names) == 1:
+                
                 csv_file = csv_file[csv_file.file == each_name]
+                print("Dir: ", each_dir, each_name, csv_file.shape)
                 code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(csv_file)
 
                 diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
