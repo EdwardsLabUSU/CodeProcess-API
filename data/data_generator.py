@@ -176,9 +176,9 @@ if __name__ == '__main__':
         for each_name in file_names:
             if '.'.join(each_name.split('.')[:-1]) in each_dir or len(file_names) == 1:
                 
-                csv_file = csv_file[csv_file.file == each_name]
-                print("Dir: ", each_dir, each_name, csv_file.shape)
-                code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(csv_file)
+                _file_df = csv_file[csv_file.file == each_name]
+                print("Dir: ", each_dir, each_name, _file_df.shape)
+                code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(_file_df)
 
                 diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
                 json.dump(diff_book['diff'], diff_file)
