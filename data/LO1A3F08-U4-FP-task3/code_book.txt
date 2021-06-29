@@ -1,0 +1,34 @@
+# Phil Fernberg
+# CS 1400 - L01
+# Assignment 3 - Task 3 Fluky Numbers
+
+# Import modules
+from time import time
+from random import randint, seed
+
+# set variables
+iterator = 0
+startTime = time()
+flukyCount = 0
+
+# Begin for loop
+for num in range(1, 10000):
+    total = 0
+    for i in range(1, num):
+        iterator += 1
+        if num % i == 0:
+            seed(i)
+            total += randint(1, num)
+        if total > num:
+            break
+    if total == num:
+        flukyCount += 1
+        print("Fluky number: " + str(num))
+    if flukyCount == 7:
+        break
+
+# Print results 
+print(f"Total Time: {time()-startTime} seconds")
+print(f"Total Loops: {iterator}")
+
+

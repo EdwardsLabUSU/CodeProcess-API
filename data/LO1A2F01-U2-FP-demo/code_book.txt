@@ -1,0 +1,28 @@
+# Phil Fernberg
+# CS 1400 - L01
+# Assignment ??
+
+# Display Time Demo
+import time
+currentTime = time.time()
+totalSeconds = int(currentTime)
+currentSeconds = totalSeconds % 60
+totalMinutes = totalSeconds // 60
+currentMinutes = totalMinutes % 60
+totalHour = totalMinutes % 60
+currentHour = totalHour % 24
+
+print("The current time is", currentHour, ":", currentMinutes, ":", currentSeconds, "GMT")
+
+# Augmented Operator
+value1 = 0
+value2 = 0
+print("The values are", value1, "and", value2)
+
+value1 = value1 + 1
+value2 += 1
+print("The values are", value1, "and", value2)
+
+value1 = value1 - 10
+value2 = 0
+print("The values are", value1, "and" value2)

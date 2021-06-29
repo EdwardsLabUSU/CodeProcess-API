@@ -1,0 +1,56 @@
+# Acetin Weight
+# CS1400 - LO1 XL
+# Assignment 3
+
+# import needed modules (from for easier use)
+from random import seed
+from random import randint
+from time import time
+
+# set up variables for use in loop
+numLoops = 0
+timer = time()
+numFluky = 0
+
+# The master loop (test 1-10000)
+for i in range(1, 10001):
+    
+    # Set sum variable to 0
+    flukyTest = 0
+
+    # Find factors of iteration number from 1 to half of iteration number
+    for factorTest in range(1, i // 2):
+        numLoops += 1
+        
+        # If the only number left is the factor paired with 2, find it, if there is one, and finish searching for factors
+        if factorTest > i / 3 and i % 2 == 0:
+            seed(i / 2)
+            flukyTest += randint(1, i)
+            break
+        elif factorTest > i / 3:
+            break
+            
+        # If a factor is found, find a random int from that factor
+        if i % factorTest == 0:
+            seed(factorTest)
+            flukyTest += randint(1, i)
+            
+        # If the sum goes above what it needs to be, end it immediately
+        if flukyTest > i:
+            break
+    
+    # Test if the sum of the factor random integers are equal to the iteration number
+    if flukyTest == i:
+        print("Fluky number: " + str(i))
+        numFluky += 1
+        
+    # End loop if all 7 fluky numbers are found
+    if numFluky == 7:
+        break
+    
+# calculate time
+timer = format(time() - timer, ".2f")
+
+# print total time and number of loops
+print("Total Time: " + str(timer))
+print("Total Loops: " + str(numLoops))

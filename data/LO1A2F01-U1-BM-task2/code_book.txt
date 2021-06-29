@@ -1,0 +1,34 @@
+#systemReq
+give employee pay and deductions based upon hours worked, pay rate, and taxes
+
+#systemAnalysis
+user input
+    employee name
+    hours worked in a week
+    hourly pay
+    federal tax witholding
+    state tax withholding
+use of simple multiplication, addition and subtraction to acquire totals
+#systemDesign
+User input required information.
+display "'name' and pay information"
+right justify totals
+align $ and : in each line
+create seperate sections for 'pay' and 'deductions'
+net pay at bottom
+
+#Test
+Mitch Bro
+pay = 15.00
+hours = 15
+Fed-Tax = .11
+State-Tax = .11
+netpay = 175.
+
+#test2
+jenna Zo
+pay = 12.55
+hours = 35.25
+FedTax = .15
+StateTax = .23
+netpay = 274.28

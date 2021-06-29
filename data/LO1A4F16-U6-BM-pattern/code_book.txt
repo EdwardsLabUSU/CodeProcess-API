@@ -1,0 +1,53 @@
+System Req
+
+
+
+
+System Analysis
+
+
+
+
+System Des   
+
+    import random
+    user will input information 
+the pattern module will have several function
+        setup() -
+ign will make turtle draw quickly
+                    make turtle have a window of 1000 * 800
+        reset() - turtle will erase everything
+        drawRectenglePattern() - will call draw rectangle
+                                center position is x, y of circular pattern drawn
+                                Offset- distance from center to starting corner
+
+        drawRectangle() - draw a single rectangle
+        drawCirclePatten() -
+        drawSuperPattern() - randomly draw rectangle and circle patterns based on random values
+        drawRandomColor()- do not use any perameters and make turtle draw in 1/4 random colors
+        done()-called when user quits, keeps window open
+
+    drawRectanglePattern()
+        numbers 1 - 4 will be assigned to colors
+
+        user will input center possition
+        will go to center position
+        user will input the number of rectangles
+        number degree between starting corners wi        for statement with number of rectangles being the range
+ll be determined by 360 / number of rectangles
+        user will input offset length
+        pickup pen
+        go to cos*x, sin*y
+        putdown pen
+        user will input rotation of starting corner
+        user will input the width of the rectangle
+         user will input the length
+        user wil        pen will go forward length of rectangle and turn right 90
+        user will input the length
+        pen will travel length
+        pen will turn right 90
+ itself to go said distance
+        f rectangles
+
+
+Testing

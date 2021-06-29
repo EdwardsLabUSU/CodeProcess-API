@@ -9,9 +9,75 @@ from lib.diff import get_diff_blocks
 
 event_book = []
 
-DATA_DIR = '../data/'
+DATA_DIR = './data/'
 
+# class PhanonPlayback:
+# 
+#     @staticmethod
+#     def start_playback(data_frame):
+#         print("Hello panda...")
+#         global event_book
+#         diff_book = []
+#         event_book = []
+#         code_book = ''
+#         pre_action = None
+#         output_file = open(os.path.join(DATA_DIR, 'output.txt'), 'w')
+#         for index, row in data_frame.iterrows():
+#             # print("Index: ", index)
+#             event = row['event']
+#             input = row['input']
+#             removed = row['removed']
+# 
+#             if event == 'e':
+#                 cursor_pos = int(row['cursor_pos'])
+#                 if len(input) > 0:
+#                     code_book = code_book[:cursor_pos] + input + code_book[cursor_pos:]
+#                 # elif len(removed) > 0:
+#                 #     
+#                 # if not pd.isna(input):
+#                 #     # print(index, " -> ", cursor_pos, input)
+#                     
+#                 elif not pd.isna(row['cursor_pos']):
+#                     
+#                     if pd.isna(removed):
+#                         # print("Removed is also null here... : ", row)
+#                         pass
+#                     else:
+#                         removed_length = len(removed)
+#                         if removed_length >= 1:
+#                             code_book = code_book[:cursor_pos] + code_book[cursor_pos + len(removed):]
+#                             # code_book = code_book.replace(removed, '')
+#                         else:
+#                             code_book = code_book[:cursor_pos] + code_book[cursor_pos + 1:]
+#                 else:
+#                     pass
+#                 pre_action = None
+#                 # elif event == 'a':
+#                 #   if input and  pre_action:
+#                 #     if pre_action == 'Select All' and input == 'Delete':
+#                 #       pre_action = 'Delete All'
+#                 #   else:
+#                 #     pre_action = input
+# 
+#                 output_file.write('###########################################################')
+#                 output_file.write(
+#                     str(index) + '-' + "Removed: " + str(len(row['removed'])) if not pd.isna(row['removed']) else '0')
+#                 output_file.write('\n' + str(row) + '\n')
+# 
+#                 output_file.write("************************************************\n")
+#                 output_file.write(code_book)
+#                 output_file.write("************************************************\n")
+#                 # print('---------------')
+#                 # print("Code: ", code_book)
+#                 # print('---------------')
+#                 diff_book.append(code_book)
+#                 event_book.append(row)
+# 
+#             # print(row['event'], row['input'])
+#         output_file.close()
+#         return code_book, {'diff': diff_book, 'cursor_pos': []}
 
+# 
 class PhanonPlayback:
 
     @staticmethod
@@ -21,32 +87,48 @@ class PhanonPlayback:
         event_book = []
         diff_cursor_pos = []
         code_book = ''
+        # output_file = open(os.path.join(DATA_DIR, 'output.txt'), 'w')
         for index, row in data_frame.iterrows():
             # print("Index: ", index)
             event = row['event']
             input = row['input']
-
+            cursor = row['cursor_pos']
+            removed = row['removed']
             if event == 'e':
-                cursor_pos = int(row['cursor_pos'])
-                if not pd.isna(input):
-                    # print(index, " -> ", cursor_pos, input)
-                    code_book = code_book[:cursor_pos] + input + code_book[cursor_pos:]
-                elif not pd.isna(row['cursor_pos']):
-                    removed = row['removed']
-                    if pd.isna(removed):
-                        # print("Removed is also null here... : ", row)
-                        continue
-                    removed_length = len(removed)
-                    if removed_length > 1:
+                if not pd.isna(cursor):
+                    cursor_pos = int(cursor)
+                    if not pd.isna(input) and len(input) > 0:
+                        code_book = code_book[:cursor_pos] + input + code_book[cursor_pos:]
+                    elif not pd.isna(removed) and len(removed) > 0:
                         code_book = code_book[:cursor_pos] + code_book[cursor_pos + len(removed):]
-                        # code_book = code_book.replace(removed, '')
-                    else:
-                        code_book = code_book[:cursor_pos] + code_book[cursor_pos + 1:]
-                else:
-                    continue
+                # if not pd.isna(input):
+                    # print(index, " -> ", cursor_pos, input)
+                    # code_book = code_book[:cursor_pos] + input + code_book[cursor_pos:]
+                # elif not pd.isna(row['cursor_pos']):
+                #     removed = row['removed']
+                #     if pd.isna(removed):
+                #         # print("Removed is also null here... : ", row)
+                #         continue
+                #     removed_length = len(removed)
+                #     if removed_length >= 1:
+                #         code_book = code_book[:cursor_pos] + code_book[cursor_pos + len(removed):]
+                #         # code_book = code_book.replace(removed, '')
+                #     else:
+                #         code_book = code_book[:cursor_pos] + code_book[cursor_pos + 1:]
+
+                # output_file.write('###########################################################\n')
+                # output_file.write(
+                #     str(index) + '-' + "Removed: " + str(len(row['removed'])) if not pd.isna(row['removed']) else '0')
+                # output_file.write(
+                #     str(index) + '-' + "Input: " + str(len(row['input'])) if not pd.isna(row['input']) else '0')
+                # output_file.write('\n' + str(row) + '\n')
+                # output_file.write("************************************************\n")
+                # output_file.write(code_book)
+                # output_file.write("************************************************\n")
                 diff_book.append(code_book)
                 diff_cursor_pos.append(len(code_book[:cursor_pos + 1].split('\n')))
                 event_book.append(row)
+        # output_file.close()
         return code_book, {'diff': diff_book, 'cursor_pos': diff_cursor_pos}
 
 
