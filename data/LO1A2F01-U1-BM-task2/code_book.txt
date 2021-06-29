@@ -1,4 +1,4 @@
-# Mitch Brotherson
+# @@@@@ @@@@@@@@@@
 # CS1400 - CO1
 # Assignment 2
 
@@ -84,3 +84,4 @@ turtle.penup()
 #hide&keep
 turtle.hideturtle()
 turtle.done()
+t("please enter location of center (x,y) - ")

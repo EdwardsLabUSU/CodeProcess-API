@@ -9,7 +9,7 @@ from lib.diff import get_diff_blocks
 
 event_book = []
 
-DATA_DIR = './data/'
+DATA_DIR = '/home/pi/PycharmProjects/codeViz/data'
 
 # class PhanonPlayback:
 # 
@@ -87,7 +87,7 @@ class PhanonPlayback:
         event_book = []
         diff_cursor_pos = []
         code_book = ''
-        # output_file = open(os.path.join(DATA_DIR, 'output.txt'), 'w')
+        output_file = open(os.path.join(DATA_DIR, 'output.txt'), 'w')
         for index, row in data_frame.iterrows():
             # print("Index: ", index)
             event = row['event']
@@ -116,19 +116,19 @@ class PhanonPlayback:
                 #     else:
                 #         code_book = code_book[:cursor_pos] + code_book[cursor_pos + 1:]
 
-                # output_file.write('###########################################################\n')
-                # output_file.write(
-                #     str(index) + '-' + "Removed: " + str(len(row['removed'])) if not pd.isna(row['removed']) else '0')
-                # output_file.write(
-                #     str(index) + '-' + "Input: " + str(len(row['input'])) if not pd.isna(row['input']) else '0')
-                # output_file.write('\n' + str(row) + '\n')
-                # output_file.write("************************************************\n")
-                # output_file.write(code_book)
-                # output_file.write("************************************************\n")
+                output_file.write('###########################################################\n')
+                output_file.write(
+                    str(index) + '-' + "Removed: " + str(len(row['removed'])) if not pd.isna(row['removed']) else '0')
+                output_file.write(
+                    str(index) + '-' + "Input: " + str(len(row['input'])) if not pd.isna(row['input']) else '0')
+                output_file.write('\n' + str(row) + '\n')
+                output_file.write("************************************************\n")
+                output_file.write(code_book)
+                output_file.write("************************************************\n")
                 diff_book.append(code_book)
                 diff_cursor_pos.append(len(code_book[:cursor_pos + 1].split('\n')))
                 event_book.append(row)
-        # output_file.close()
+        output_file.close()
         return code_book, {'diff': diff_book, 'cursor_pos': diff_cursor_pos}
 
 
@@ -248,6 +248,7 @@ if __name__ == '__main__':
     dirs = [name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name))]
     columns = ['event', 'input', 'removed', 'cursor_pos', 'timestamp', 'file', 'ver']
     print("Directories: ", dirs)
+    # dirs = ['LO1A2F01-U3-RA-task2']
     for each_dir in dirs:
         if '__' in each_dir:
             continue

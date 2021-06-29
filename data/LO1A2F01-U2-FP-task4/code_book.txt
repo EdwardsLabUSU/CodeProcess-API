@@ -1,4 +1,4 @@
-# Phil Fernberg
+# @@@@ @@@@@@@@
 # CS 1400 - L01
 # Assignment 2 - Task 4
 
@@ -54,6 +54,6 @@ msg += format(str(netPay), ">" + str(numWidth))
 
 # Display Results
 print(msg)
-# Phil Fernberg
+# @@@@ @@@@@@@@
 # CS 1400 - L01
 # Assignment 2
