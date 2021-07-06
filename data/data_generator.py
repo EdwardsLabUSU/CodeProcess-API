@@ -237,7 +237,7 @@ class DiffVisualizer:
         ax.grid(which='minor', color='#CCCCCC', linestyle='-', lw=0.7, alpha=0.5)
         if plot_name:
             plt.savefig(plot_name)
-        # plt.show()
+        plt.show()
         plt.close()
 #         
 
@@ -247,18 +247,20 @@ if __name__ == '__main__':
 
     dirs = [name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name))]
     columns = ['event', 'input', 'removed', 'cursor_pos', 'timestamp', 'file', 'ver']
-    print("Directories: ", dirs)
-    # dirs = ['LO1A2F01-U3-RA-task2']
+    # print("Directories: ", dirs)
+    # dirs = ['Thompson-Grayson-Unit7']
     for each_dir in dirs:
         if '__' in each_dir:
             continue
         path = os.path.join(os.getcwd(), each_dir)
         csv_file = pd.read_csv(os.path.join(path, 'phanonEditLog.csv'), names=columns, index_col=None)
         file_names = csv_file.file.unique()
+        print(csv_file.head())
         print("File names: ", file_names)
         for each_name in file_names:
             if '.'.join(each_name.split('.')[:-1]) in each_dir or len(file_names) == 1:
                 if ".py" not in each_name:
+                    print("Continued...")
                     continue
                 _file_df = csv_file[csv_file.file == each_name]
                 print("Dir: ", each_dir, each_name, _file_df.shape)
