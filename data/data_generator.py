@@ -248,7 +248,7 @@ if __name__ == '__main__':
     dirs = [name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name))]
     columns = ['event', 'input', 'removed', 'cursor_pos', 'timestamp', 'file', 'ver']
     # print("Directories: ", dirs)
-    # dirs = ['Thompson-Grayson-Unit7']
+    dirs = ['LO1A7M08-TG-Unit7-main']
     for each_dir in dirs:
         if '__' in each_dir:
             continue
