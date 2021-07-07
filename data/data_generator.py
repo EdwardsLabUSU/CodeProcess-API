@@ -248,7 +248,7 @@ if __name__ == '__main__':
     dirs = [name for name in os.listdir(os.getcwd()) if os.path.isdir(os.path.join(os.getcwd(), name))]
     columns = ['event', 'input', 'removed', 'cursor_pos', 'timestamp', 'file', 'ver']
     # print("Directories: ", dirs)
-    dirs = ['LO1A7M08-TG-Unit7-main']
+    # dirs = ['LO1A7M08-TG-Unit7-main']
     for each_dir in dirs:
         if '__' in each_dir:
             continue
@@ -265,23 +265,40 @@ if __name__ == '__main__':
                 _file_df = csv_file[csv_file.file == each_name]
                 print("Dir: ", each_dir, each_name, _file_df.shape)
                 code, diff_book, grid_data, diff_match_blocks, diff_line = DiffVisualizer.visualize(_file_df)
+                
+                
+                
+                import zipfile
+                
+                def zip_file(file_name, content):
+                    _path = os.path.join(path, f"{file_name.split('.')[0]}.zip")
+                    zf = zipfile.ZipFile(_path, mode="w", compression=zipfile.ZIP_DEFLATED)
+                    zf.writestr(file_name, content)
+                    zf.close()
+                
+                # diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
+                # json.dump(diff_book['diff'], diff_file)
+                # diff_file.close(os.path.join(path, 'diff_book.csv'))
+                
+                zip_file("diff_book.csv", json.dumps(diff_book['diff']))
+                zip_file('code_book.txt', code)
+                zip_file('grid_point.json', json.dumps(grid_data))
+                zip_file('match_block.json', json.dumps(diff_match_blocks))
+                zip_file('diff_line.json', json.dumps(diff_line))
+                
 
-                diff_file = open(os.path.join(path, 'diff_book.csv'), 'w')
-                json.dump(diff_book['diff'], diff_file)
-                diff_file.close()
-
-                code_file = open(os.path.join(path, 'code_book.txt'), 'w')
-                code_file.writelines(code)
-                code_file.close()
-
-                grid_file = open(os.path.join(path, 'grid_point.json'), 'w')
-                json.dump(grid_data, grid_file)
-                grid_file.close()
-
-                match_file = open(os.path.join(path, 'match_block.json'), 'w')
-                json.dump(diff_match_blocks, match_file)
-                match_file.close()
-
-                diff_line_file = open(os.path.join(path, 'diff_line.json'), 'w')
-                json.dump(diff_line, diff_line_file)
-                diff_line_file.close()
+                # code_file = open(os.path.join(path, 'code_book.txt'), 'w')
+                # code_file.writelines(code)
+                # code_file.close()
+                # 
+                # grid_file = open(os.path.join(path, 'grid_point.json'), 'w')
+                # json.dump(grid_data, grid_file)
+                # grid_file.close()
+                # 
+                # match_file = open(os.path.join(path, 'match_block.json'), 'w')
+                # json.dump(diff_match_blocks, match_file)
+                # match_file.close()
+                # 
+                # diff_line_file = open(os.path.join(path, 'diff_line.json'), 'w')
+                # json.dump(diff_line, diff_line_file)
+                # diff_line_file.close()
