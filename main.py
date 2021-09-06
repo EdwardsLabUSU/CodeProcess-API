@@ -1,4 +1,7 @@
 import os, json
+import zipfile
+import time
+from io import BytesIO
 
 from flask import Flask, send_file
 from flask_cors import CORS
@@ -12,6 +15,17 @@ CORS(app)
 Compress(app)
 path = os.getcwd()
 
+def zip_file(file):
+    memory_file = BytesIO()
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        individualFile = file
+        data = zipfile.ZipInfo(individualFile)
+        data.date_time = time.localtime(time.time())[:6]
+        data.compress_type = zipfile.ZIP_DEFLATED
+        zf.writestr(data)
+        # zf.writestr(data, individualFile['fileData'])
+    memory_file.seek(0)
+    return send_file(memory_file, attachment_filename='capsule.zip', as_attachment=True)
 
 
 @app.route('/')
@@ -22,6 +36,7 @@ def index():
 @app.route('/data/<folder>/<file>')
 def get_file(folder, file):
     file_dir = os.path.join(path, f"data/{folder}/{file}")
+    # return zip_file(file_dir)
     return send_file(file_dir)
 
 # @app.after_request
