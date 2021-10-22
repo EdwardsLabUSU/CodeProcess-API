@@ -131,6 +131,7 @@ class PhanonPlayback:
                     output_file.write(code_book)
                     output_file.write("************************************************\n")
                     diff_book.append(code_book)
+                    # diff_cursor_pos.append(cursor_pos)
                     diff_cursor_pos.append(len(code_book[:cursor_pos + 1].split('\n')))
                     event_book.append(row)
         output_file.close()
@@ -293,6 +294,7 @@ if __name__ == '__main__':
                 
                 def zip_file(file_name, content):
                     _path = os.path.join(path, f"{file_name.split('.')[0]}.zip")
+                    print("Saved in: ", _path)
                     zf = zipfile.ZipFile(_path, mode="w", compression=zipfile.ZIP_DEFLATED)
                     zf.writestr(file_name, content)
                     zf.close()
