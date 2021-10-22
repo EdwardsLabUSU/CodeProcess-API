@@ -1,0 +1,96 @@
+SYS REQUIREMENTS
+    user inputs number of players
+    each player has 100$
+    each player can continue till theyre out of money
+    promt each player for amount of bet
+    deal new deck of cards
+
+
+
+SYS ANALYSIS
+
+
+
+SYS DESIGN
+    create empty list
+    prompt user for number of players
+    append number of players +1 empty list (for dealer)
+    for each list appended the first value in the list will be the players balance
+    set the balance = 100$
+    #playerBets
+        define the function as private
+        if the players balance <= 5 and >= 0
+            they bet the remaining balance
+        elif the players balance = 0
+            skip player
+        else (player balance > 5)
+            player input the amount they want to bet
+            check against remaining balance
+            if less than = to remaining balance
+            subtract amount from balance
+            add amount to bet
+
+
+        call the function to deal the cards
+
+        if a players delt value > dealer delt value and player delt value <= 21
+            player bet doubles
+    #dealTheCards
+        shuffle the cards
+        for each player use the deck.draw() function
+        append the drawn value to list possition(1) for each player
+        do the same for the dealer
+        have each player draw a second card and append them to the list[2] position
+        do the same for the dealer.
+        call the list[2] position for the dealer
+
+    #sumOfCardValues
+        use card.getCardValue() to get numeric assignment of cards
+        jack, queen, king = 10
+        other values = themselves
+        sum the value of cards
+        if sum < = 21
+            ace = 11
+        elif sum > 21
+            ace = 1
+
+
+    #playerHands
+        call the possition[1,2] in each player list to print.
+            # this should show what card each player has
+        call hit or hold function
+
+            #hit or hold function
+                for i in list of players
+                    if total values of player <= 21
+                        prompt user input (hit or bust)
+                            if user input == hit or Hit or HIT
+                                deck.draw() to draw card and append card to user list[x]
+                                total values for user list[1,x]
+
+                            else:
+                                return total values for user input
+
+                     else:
+                     print bust
+                     lose bet
+
+    #dealersTurn
+        call values from dealer list[2,3]
+        use time.sleep() function to delay dealer for 1 sec
+        call dealer hit or hold function
+            dealer hit or hold function
+                define function name
+                variable = sum of values from dealer list[2,3]
+                while variable < 17
+                    deck.draw() to dealer list[3]
+                    variable = sum of dealer list[1,3]
+                if variable >= 17 and variable <=21
+                    return variable
+                else:
+                    return bust
+    #determiningWinners
+
+
+
+

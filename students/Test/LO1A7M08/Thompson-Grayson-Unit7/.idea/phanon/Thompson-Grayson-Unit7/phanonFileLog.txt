@@ -1,0 +1,5 @@
+/.idea/.gitignore
+/main.py
+/deck.py
+/card.py
+/plan1.txt

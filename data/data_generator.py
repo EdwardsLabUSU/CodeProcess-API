@@ -4,12 +4,17 @@ import numpy as np
 import pandas as pd
 from matplotlib import colors
 from matplotlib import pyplot as plt
+import pickle, random, string
 
 from lib.diff import get_diff_blocks
 
 event_book = []
 
 DATA_DIR = '/home/pi/PycharmProjects/codeViz/data'
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
 
 # class PhanonPlayback:
 # 
@@ -116,18 +121,18 @@ class PhanonPlayback:
                 #     else:
                 #         code_book = code_book[:cursor_pos] + code_book[cursor_pos + 1:]
 
-                output_file.write('###########################################################\n')
-                output_file.write(
-                    str(index) + '-' + "Removed: " + str(len(row['removed'])) if not pd.isna(row['removed']) else '0')
-                output_file.write(
-                    str(index) + '-' + "Input: " + str(len(row['input'])) if not pd.isna(row['input']) else '0')
-                output_file.write('\n' + str(row) + '\n')
-                output_file.write("************************************************\n")
-                output_file.write(code_book)
-                output_file.write("************************************************\n")
-                diff_book.append(code_book)
-                diff_cursor_pos.append(len(code_book[:cursor_pos + 1].split('\n')))
-                event_book.append(row)
+                    output_file.write('###########################################################\n')
+                    output_file.write(
+                        str(index) + '-' + "Removed: " + str(len(row['removed'])) if not pd.isna(row['removed']) else '0')
+                    output_file.write(
+                        str(index) + '-' + "Input: " + str(len(row['input'])) if not pd.isna(row['input']) else '0')
+                    output_file.write('\n' + str(row) + '\n')
+                    output_file.write("************************************************\n")
+                    output_file.write(code_book)
+                    output_file.write("************************************************\n")
+                    diff_book.append(code_book)
+                    diff_cursor_pos.append(len(code_book[:cursor_pos + 1].split('\n')))
+                    event_book.append(row)
         output_file.close()
         return code_book, {'diff': diff_book, 'cursor_pos': diff_cursor_pos}
 
@@ -144,11 +149,11 @@ cmap = colors.ListedColormap(['white', 'lightblue'])
 class DiffVisualizer:
 
     @staticmethod
-    def visualize(df, plot_name=None):
+    def visualize(df, *args, **kwargs):
         _df = df[(df.event == 'e') | (df.event == 'a')]
         code, diff_book = PhanonPlayback.start_playback(_df)
         grid_data, grid_points, diff_match_blocks, diff_line_number = DiffVisualizer.generate_grid_data(code, diff_book)
-        DiffVisualizer.plot_grid(grid_data, code, plot_name)
+        DiffVisualizer.plot_grid(grid_data, code, *args, **kwargs)
         # code:  contains the final code
         # diff_book: contains the snapshot of the current code for each event.
         # grid_points: contains the points required to plot the visualization.
@@ -213,7 +218,7 @@ class DiffVisualizer:
         return grid_data, grid_points, diff_match_blocks, cursor_positions
 
     @staticmethod
-    def plot_grid(data, final_code, plot_name=None):
+    def plot_grid(data, final_code, plot_dir=None, pickle_dir = None, identifier = None):
 
         fig, ax = plt.subplots(figsize=(25, 8))
         ax.set_aspect('auto')
@@ -235,10 +240,26 @@ class DiffVisualizer:
         ax.grid(which='both')
         ax.grid(which='major', color='#CCCCCC', linestyle='-', lw=0.7, alpha=0.5)
         ax.grid(which='minor', color='#CCCCCC', linestyle='-', lw=0.7, alpha=0.5)
-        if plot_name:
-            plt.savefig(plot_name)
-        plt.show()
-        plt.close()
+        if plot_dir:
+            plt.savefig(os.path.join(plot_dir, f"{identifier}.png"))
+        if pickle_dir:
+            pickle_data = {
+                'data': data,
+                'y_ticks': {
+                    'major': y_major_ticks,
+                    'minor': y_minor_ticks
+                },
+                'x_ticks': {
+                    'major': x_major_ticks,
+                    'minor': y_minor_ticks
+                },
+                'final_code': final_code
+            }
+            with open(os.path.join(pickle_dir, f'{identifier} .pickle'), 'wb') as handle:
+                pickle.dump(pickle_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            
+        # plt.show()
+        # plt.close()
 #         
 
 

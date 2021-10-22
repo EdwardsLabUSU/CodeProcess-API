@@ -1,0 +1,75 @@
+create empty list hands, zero is always dealer
+create empty list values
+create empty list for bets
+create empty 2d list for loosers winners and ties
+
+THIS PLAN IS ALL SORTS OF BACKWARDS AND DOESNT WORK
+THE ACTUAL PROGRAM FOLLOWS THE SAME CONCEPT, DIFFERENT IMPLEMENTATION
+
+Ask user for number of players
+
+for number of players
+    append a list to the list of hands
+    append 100 to list values
+
+deck = deck()
+
+while playAgain:
+    for i in range(len(hands))
+        if
+    ask for bet
+    for i in range(hands)
+        ask player how much they would like to bet
+        append that to bet list
+
+    deal the cards
+        for i in range(2)
+            for j in range(players)
+                add a card to hand[[j][i]
+
+    for i in range(players[1:]))
+        hold = false
+        print what player is playing
+        while not hold:
+            getsum(hand[i], aceValue) # include an ace check in this
+            show player hand
+            show player sum
+            check for bust
+            if bust:
+                print they busted
+                append [i] to loosers list
+                break loop
+            ask if they would like to hit or hold
+            if hold:
+                hold = true
+            elif hit:
+                give them new card
+                set ace value to true if new card is ace. (removes the need for a search function)
+
+    print dealer card one
+    print dealer card two
+    dealer value = getsum(hands[0])
+    while dealerValue <= 17
+        time.sleep(1)
+        give the dealer a new card
+        print the dealer takes a card
+        print new card
+        set ace to true if card is ace
+        dealerValue = getsum(hand[0], aceValue)
+        if dealerValue > 21
+            print the dealer busts
+            give all players there bets
+            break
+
+    for i in range(players[1:])
+        value = getsum(i)
+        if dealerValue == value
+            add i to tie list
+        elif dealerValue > value
+            add i to looser list
+        elif dealervalue < value
+            add i to winners lsit
+
+
+
+

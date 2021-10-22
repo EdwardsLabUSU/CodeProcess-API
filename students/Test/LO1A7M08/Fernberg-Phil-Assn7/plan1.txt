@@ -1,0 +1,35 @@
+# Phil Fernberg
+# CS 1400 - L01
+# Assignment 7 - Task 1
+
+Req Specs
+    user gives number of players
+    user chooses whether to hit or not
+    user chooses whether to play again
+
+
+System design
+    get input num of players
+    give players 100 bucks
+    deal the cards to each player
+    display dealer hand
+    display players hands
+    prompt for hits
+    display full dealer hand
+    determine winner
+    payouts
+    when a player gets to 0, they're out
+    prompt to play again
+
+Software Design
+    deal function
+        one parameter
+        shuffles deck and deals two cards to each player
+
+    display menu
+        shows account balances for each player
+
+    payouts
+        adds to and subtracts from balances according to winnings
+
+    play again
