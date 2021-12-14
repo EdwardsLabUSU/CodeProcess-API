@@ -1,7 +1,0 @@
-
-Cpython:S125¬"Remove this commented out code.(ôë´Ïøÿÿÿÿ8é„¢ô§/
-Jpython:S5806c"+Rename this variable; it shadows a builtin.(á‰ù8ÕÏœô§/
-Cpython:S125·"Remove this commented out code.(ªÂì•ùÿÿÿÿ8Äš¬ô§/
->python:S125…"Remove this commented out code.(¯•Æõ8ÎáüÅ»/
-Cpython:S125"Remove this commented out code.(×ğ¹æøÿÿÿÿ8ØêÜô§/
-spython:S3776Y"TRefactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed.(±£²à8ÕÏœô§/
