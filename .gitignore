@@ -1,1 +1,8 @@
 env/*
+students/
+.idea/
+data/
+data_bak/
+.ipynb_checkpoints/
+code-debug.ipynb
+database.db
