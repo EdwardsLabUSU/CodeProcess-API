@@ -34,20 +34,19 @@ Installation
 
 First, download this repository and install required python packages. <br/>
 
-.. code-block:: bash
-   pip3 install -r requirements.txt
+<code>pip3 install -r requirements.txt</code>
 
 Open main.py and change the following folder location:
-.. code-block:: python
+<pre><code>
     app.config['UPLOAD_FOLDER'] = './uploads'
     app.config['OUTPUT_FOLDER'] = './files'
+</code></pre>
 
 ``UPLOAD_FOLDER`` => Folder to store uploaded files. <br/>
 ``OUTPUT_FOLDER`` => Folder to store generated files in Step 3. <br/>
 
 Run the application using: <br/>
-.. code-block:: bash
-   python main.py
+<code>python main.py</code>
 
 
 
