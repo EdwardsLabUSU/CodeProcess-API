@@ -1,6 +1,6 @@
 <h1>CodeProcess</h1>
 <p>
-CodeProcessis a software visualization tool that is designed to givethe viewer an immediate assessment of the general characteristicsof the process used to develop a piece of software. It features inter-active controls for the user to analyze details of the process. It is aweb application developed using Python, D3 and React JS.
+CodeProcess is a software visualization tool that is designed to give the viewer an immediate assessment of the general characteristics of the process used to develop a piece of software. It features inter-active controls for the user to analyze details of the process. It is a web application developed using Python, D3 and React JS. 
 </p>
 
 ## How CodeProcess Works?
